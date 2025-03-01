@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaTeX Example</title>
+    <!-- Link zu MathJax für das Rendern von LaTeX -->
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+</head>
+<body>
+
+<h1>Optimization Model</h1>
+
+<p>Here is the mathematical model written in LaTeX:</p>
+
+<div id="latex">
+    \[
+    \min \quad \sum_{j \in J} \sum_{s \in S} e_{js} \cdot x_{js} + 2 \sum_{j \in J\cup \bar{J}} \sum_{s \in S, s^\prime \in S_s} (b^1_{ss^\prime j} + b^2_{ss^\prime j}) \cdot \vert s_3 \vert
+    \]
+    \[
+    \text{s.t.} \quad \sum_{s \in S_j} x_{js} = 1 \quad \forall j \in J
+    \]
+    \[
+    x_{js} + x_{j^\prime s} \leq 1 \quad \forall s \in S; (j,j^\prime ) \in \Theta_s
+    \]
+    \[
+    b_{ss^\prime j}^k \geq x_{js} + x_{j^\prime s^\prime} - 1 \quad \forall j,j^\prime \in \Theta_{s,s^\prime}^k; s \in S, s^\prime \in S_s, k=1,2
+    \]
+    \[
+    x_{j \rho^j} = 1 \quad \forall j \in \bar{J}
+    \]
+    \[
+    x_{js}, b^k_{ss^\prime j} \in \{ 0,1 \} \quad \forall j \in J; s \in S, s^\prime \in S_s, k=1,2
+    \]
+</div>
+
+</body>
+</html>
