@@ -1,4 +1,4 @@
-# MulitDeepStorageAssignment Problem
+# Multi-Deep-Storage-Rack-Assignment-Problem
 
 This code provides the framework for creating and optimizing a Multi-Deep Rack Assignment Problem (RAP). The warehouse layout (including positions, number of racks, etc.) and the definition of all stopovers must be manually entered into the designated Excel file. The code then automatically reads this file and performs linear optimization using the Gurobi optimizer.
 
@@ -33,4 +33,4 @@ Um Virtual Stopover extra zu behandeln, werden diese analog zu 2. in ein eigenes
 ![Beschreibung des Bildes](/initial_storage_position_sheet.png)
 Die Initila occupied storage positions für die verwendeten racks ebenfalls in ein eigenes sheet eingetragen werden.
 
-# Multi-Deep-Storage-Rack-Assignment-Problem
+
