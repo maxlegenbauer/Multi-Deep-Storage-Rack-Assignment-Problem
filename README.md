@@ -23,10 +23,10 @@ Storage positions are represented in the form $S(s_1,s_2,s_3)$. While aisle posi
 
 ## 2. Stopover
 ![Beschreibung des Bildes](/stopover_sheet.png)
-Stopovers $j = (r,p_1,p_2,t_1,t_2)$ must be entered into the corresponding sheet.
-	•	“Departure Picking Station” corresponds to $p_1$.
-	•	“Arrival Picking Station” corresponds to $p_2$.
-	•	The same logic applies to the times.
+Stopovers $j = (r,p_1,p_2,t_1,t_2)$ must be entered into the corresponding sheet. \\
+	•	“Departure Picking Station” corresponds to $p_1$.\\
+	•	“Arrival Picking Station” corresponds to $p_2$.\\
+	•	The same logic applies to the times.\\
 
 For the last stopover, enter "p_dummy" for $p_2$ and the end of the entire time horizon (100 in this example) as the Arrival Time.
 
