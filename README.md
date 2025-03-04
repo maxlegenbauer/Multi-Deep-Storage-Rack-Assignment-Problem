@@ -13,7 +13,7 @@ $$ b_{ss^\prime j}^k \geq x_{js} + x_{j^\prime s^\prime} - 1 \quad \forall j,j^\
 $$ x_{j \rho^j} = 1 \quad \forall j \in \bar{J} $$
 $$ x_{js}, b^k_{ss^\prime j} \in \{ 0,1 \} \quad \forall j \in J; s \in S, s^\prime \in S_s, k=1,2 $$
 
-so that Gurobi can optimize it. In the main.py file, the link to the Excel file is passed, and finally, the model is optimized.
+so that Gurobi can optimize it. In the main.py file, the link to the Excel file is passed, and finally, the model is optimized. With the methods "to_string, 
 
 Stellen wir kurz die einzelnen sheets der Excel vor. Das vorgestllte Beispiel befindet sich in der Datei layout.xlsx:
 
