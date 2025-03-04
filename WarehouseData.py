@@ -75,14 +75,12 @@ class WarehouseData:
         
         picking_stations = pd.DataFrame(self.extrackt_picking_stations(), columns=["Picking Stations"])
         
-        # Extrahiere die Positionen für jede Picking Station
         picking_stations["Position"] = picking_stations["Picking Stations"].apply(
             lambda station: layout_df.map(
                 lambda cell: extract_tuple(cell, station)
             ).stack().dropna().tolist()
         )
         
-        # Wandle die extrahierten Positionen in Tupel um und erstelle die Liste
         picking_station_tuples = picking_stations.apply(
             lambda row: [(row["Picking Stations"], *map(int, pos.split(','))) for pos in row["Position"]] if row["Position"] else [],
             axis=1  # Wende die Funktion auf jede Zeile an
@@ -108,27 +106,22 @@ class WarehouseData:
         return E
     
     def get_initial_storage_positions(self, J_bar):
-        # Lade den DataFrame, der Rack- und Storage-Positionen enthält
         df = pd.read_excel(self.layout_file, sheet_name='Initial Storage Positions')
         
         storage_positions = {}
         
         for j in J_bar:
-            rack = j[0]  # Der erste Eintrag im Tupel j ist das Rack
+            rack = j[0]  
             
-            # Suche die Zeile im DataFrame, in der das Rack mit j[0] übereinstimmt
             matching_row = df[df['Rack'] == rack]
-            
             if not matching_row.empty:
-                # Hole die Storage Position aus der entsprechenden Zeile und spalte
                 storage_position = matching_row['Storage Position'].iloc[0]
                 
-                # Wenn die Storage Position als String im Format (x, y, z) vorliegt, wandle sie in ein Tupel um
                 if isinstance(storage_position, str):
                     storage_position = tuple(map(int, storage_position.strip('()').split(',')))
                 
-                storage_positions[j] = storage_position  # Speichere die Position für das entsprechende j
+                storage_positions[j] = storage_position  
             else:
-                storage_positions[j] = None  # Falls kein passendes Rack gefunden wird, None zuweisen
+                storage_positions[j] = None  
         
         return storage_positions
