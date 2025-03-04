@@ -19,18 +19,22 @@ Stellen wir kurz die einzelnen sheets der Excel vor. Das vorgestllte Beispiel be
 
 ## 1. Layout
 ![Beschreibung des Bildes](/layout_sheet.png)
-Storage Positions haben die Form $S(s_1,s_2,s_3)$. Die Aisle positions haben zwar auch eine spezifische Form, werden aber vom code ignoriert, dienen also nur der Darstellung in der Excel. Die picking station müssen zuerst mit ihrem jeweiligen namen angeben werden (bspw. "p1" für picking station 1, gefolgt von ihren koordniaten). Die Farben der Zellen machen keinen Unterschied, sie dienen ebenfalls nur der visualisierung (dunkle felder stehen für aisle felder)
+Storage positions are represented in the form  S(s_1,s_2,s_3) . While aisle positions also have a specific format, they are ignored by the code and serve only for visualization in Excel. The picking stations must first be specified with their respective names (e.g., "p1" for picking station 1), followed by their coordinates. The cell colors do not affect the functionality; they are only for visualization purposes (dark cells represent aisle fields).
 
 ## 2. Stopover
 ![Beschreibung des Bildes](/stopover_sheet.png)
-Stopover $j = (r,p_1,p_2,t_1,t_2) müssen ebenfalls in das dafür vorgesehene sheet eingetragen werden. "Departure Picking Station" ist hierbei $p_1$ und "Arrival Picking Station" $p_2$. Für die Zeiten analog. Für die last stopover muss für $p_2$ "p_dummy" und für die Arrival Time das ende des gesamten zeithorizonts (in dem Beispiel 100) eingetragen werden.
+Stopovers  j = (r,p_1,p_2,t_1,t_2)  must be entered into the corresponding sheet.
+	•	“Departure Picking Station” corresponds to  p_1 .
+	•	“Arrival Picking Station” corresponds to  p_2 .
+	•	The same logic applies to the times.
+
+For the last stopover, enter "p_dummy" for  p_2  and the end of the entire time horizon (100 in this example) as the Arrival Time.
 
 ## 3. Virtual Stopover
 ![Beschreibung des Bildes](/virtual_stopover_sheet.png)
-Um Virtual Stopover extra zu behandeln, werden diese analog zu 2. in ein eigenes sheet eingetragen werden.
+To handle Virtual Stopovers separately, they are entered into a dedicated sheet, similar to Stopovers (2.).
 
 ## 4. Initial Storage Position
 ![Beschreibung des Bildes](/initial_storage_position_sheet.png)
-Die Initila occupied storage positions für die verwendeten racks ebenfalls in ein eigenes sheet eingetragen werden.
-
+The initially occupied storage positions for the racks used must also be entered into a separate sheet.
 
