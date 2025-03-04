@@ -15,20 +15,20 @@ $$ x_{js}, b^k_{ss^\prime j} \in \{ 0,1 \} \quad \forall j \in J; s \in S, s^\pr
 
 so that Gurobi can optimize it. In the main.py file, the link to the Excel file is passed, and finally, the model is optimized. With the methods "to_string, "show_path_per_rack()" and "storage_position_to_string()" you have the opportunity to print out results of the opimized model.
 
-Stellen wir kurz die einzelnen sheets der Excel vor. Das vorgestllte Beispiel befindet sich in der Datei layout.xlsx:
+Let’s briefly introduce the individual sheets of the Excel file. The presented example can be found in the file layout.xlsx.
 
 ## 1. Layout
 ![Beschreibung des Bildes](/layout_sheet.png)
-Storage positions are represented in the form  S(s_1,s_2,s_3) . While aisle positions also have a specific format, they are ignored by the code and serve only for visualization in Excel. The picking stations must first be specified with their respective names (e.g., "p1" for picking station 1), followed by their coordinates. The cell colors do not affect the functionality; they are only for visualization purposes (dark cells represent aisle fields).
+Storage positions are represented in the form $S(s_1,s_2,s_3)$. While aisle positions also have a specific format, they are ignored by the code and serve only for visualization in Excel. The picking stations must first be specified with their respective names (e.g., "p1" for picking station 1), followed by their coordinates. The cell colors do not affect the functionality; they are only for visualization purposes (dark cells represent aisle fields).
 
 ## 2. Stopover
 ![Beschreibung des Bildes](/stopover_sheet.png)
-Stopovers  j = (r,p_1,p_2,t_1,t_2)  must be entered into the corresponding sheet.
-	•	“Departure Picking Station” corresponds to  p_1 .
-	•	“Arrival Picking Station” corresponds to  p_2 .
+Stopovers $j = (r,p_1,p_2,t_1,t_2)$ must be entered into the corresponding sheet.
+	•	“Departure Picking Station” corresponds to $p_1$.
+	•	“Arrival Picking Station” corresponds to $p_2$.
 	•	The same logic applies to the times.
 
-For the last stopover, enter "p_dummy" for  p_2  and the end of the entire time horizon (100 in this example) as the Arrival Time.
+For the last stopover, enter "p_dummy" for $p_2$ and the end of the entire time horizon (100 in this example) as the Arrival Time.
 
 ## 3. Virtual Stopover
 ![Beschreibung des Bildes](/virtual_stopover_sheet.png)
