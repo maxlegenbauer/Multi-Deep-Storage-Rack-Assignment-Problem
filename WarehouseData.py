@@ -70,7 +70,7 @@ class WarehouseData:
             if isinstance(cell, str) and prefix in cell:
                 match = re.search(r'\((.*?)\)', cell)
                 if match:
-                    return match.group(1)  # Extrahiere den String innerhalb der Klammern
+                    return match.group(1) 
             return None
         
         picking_stations = pd.DataFrame(self.extrackt_picking_stations(), columns=["Picking Stations"])
