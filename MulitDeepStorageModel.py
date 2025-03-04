@@ -7,25 +7,23 @@ class MultiDeepStorageModel:
         Initialisierung des Modells und der Daten
         """
         self.model = Model("Multi-Deep Storage")
-        self.J = J  # Menge der Stopovers
-        self.bar_J = bar_J  # Virtuelle Stopovers
-        self.S = S  # Speicherplätze
-        self.D = D  # Kostenmatrix
+        self.J = J 
+        self.bar_J = bar_J 
+        self.S = S  
+        self.D = D 
         self.R = R
-        self.Rho_j = Rho_j  # Startposition von virtuellem Stopover
+        self.Rho_j = Rho_j  
         self.S_s = {}
         self._initialize_S_s()
 
         self.S_j = {}
         self._initialize_S_j()
 
-        # Initialisiere Theta-Parameter
-        self.Theta_s = {}  # Konflikte an Position s
-        self.theta_ss_prime_1 = {}  # Konflikte (Typ 1) zwischen (s, s')
-        self.theta_ss_prime_2 = {}  # Konflikte (Typ 2) zwischen (s, s')
+        self.Theta_s = {}  
+        self.theta_ss_prime_1 = {}  
+        self.theta_ss_prime_2 = {}  
         self._initialize_theta()
         
-        # Initialisiere Variablen und Constraints
         self.x = None
         self.b_1 = None
         self.b_2 = None
@@ -38,10 +36,8 @@ class MultiDeepStorageModel:
         Initialisiert die Nachbarschaftsrelation S_s für alle Speicherplätze s in S.
         Die Logik entspricht der vorherigen Definition als Lambda-Funktion.
         """
-        self.S_s = {}  # Dictionary zur Speicherung der Nachbarn für jeden Speicherplatz s
-
+        self.S_s = {}  
         for s in self.S:
-            # Berechne Nachbarn basierend auf den angegebenen Bedingungen
             self.S_s[s] = [
                 s_prime for s_prime in self.S
                 if s[0] == s_prime[0] and s[1] == s_prime[1] and 
@@ -52,7 +48,6 @@ class MultiDeepStorageModel:
         """
         Initialisiert S_j für jedes Stopover j, basierend auf den Eingabedaten und der break_interval-Methode.
         """
-        # Initialisiere S_j für jedes Stopover j
         for j in self.J:
             self.S_j[j] = [
                 s for s in self.S if self.break_interval(j, s)[0] < self.break_interval(j, s)[1]
@@ -64,20 +59,17 @@ class MultiDeepStorageModel:
         """
         Initialisiert Theta_s, theta_ss_prime_1 und theta_ss_prime_2 basierend auf den Eingabedaten.
         """
-        # Initialisiere Theta_s für Konflikte an Speicherplätzen
         for s in self.S:
             self.Theta_s[s] = [
                 (j1, j2) for j1 in self.J for j2 in self.J if j1 != j2 and self.is_sharing_break_interval(j1, j2, s)
             ]
 
-        # Initialisiere theta_ss_prime_1 für Konflikte Typ 1
         for s in self.S:
             for s_prime in self.S_s[s]:
                 self.theta_ss_prime_1[(s, s_prime)] = [
                     (j1, j2) for j1 in self.J+self.bar_J for j2 in self.J+self.bar_J if j1 != j2 and self.is_blocked_at_storing(j1, j2, s, s_prime)
                 ]
 
-        # Initialisiere theta_ss_prime_2 für Konflikte Typ 2
         for s in self.S:
             for s_prime in self.S_s[s]:
                 self.theta_ss_prime_2[(s, s_prime)] = [
@@ -88,14 +80,12 @@ class MultiDeepStorageModel:
         """
         Initialisiere die Entscheidungsvariablen
         """
-        # Binäre Variablen x
         self.x = self.model.addVars(
             ((j, s) for j in self.J + self.bar_J for s in self.S),
             vtype=GRB.BINARY,
             name="x"
         )
         
-        # Binäre Blockadevariablen b_1 und b_2
         self.b_1 = self.model.addVars(
             ((s, s_prime, j) for s in self.S for s_prime in self.S_s[s] for j in self.J+self.bar_J),
             vtype=GRB.BINARY,
@@ -122,19 +112,16 @@ class MultiDeepStorageModel:
         """
         Füge Nebenbedingungen hinzu
         """
-        # 1. Jeder Stopover wird genau einem Speicherplatz zugeordnet
         self.model.addConstrs(
             (quicksum(self.x[j, s] for s in self.S_j[j]) == 1 for j in self.J),
             name="one_storage_per_stopover"
         )
 
-        # 2. Keine Überschneidung von Stopovers an demselben Speicherplatz
         self.model.addConstrs(
             (self.x[j1, s] + self.x[j2, s] <= 1 for s in self.S for j1, j2 in self.Theta_s[s]),
             name="no_overlap_at_position"
         )
 
-        # 3. Blockadebedingungen
         self.model.addConstrs(
             (self.b_1[s, s_prime, j] >= self.x[j, s] + self.x[j_prime, s_prime] - 1
              for s in self.S for s_prime in self.S_s[s] for j, j_prime in self.theta_ss_prime_1[(s, s_prime)]),
@@ -146,7 +133,6 @@ class MultiDeepStorageModel:
             name="blockage_conditions2"
         )
 
-        # 4. Anfangsbedingung für virtuelle Stopovers
         self.model.addConstrs(
             (self.x[j, s] == 1 for j in self.bar_J for s in [self.Rho_j[j]]),
             name="virtual_stopovers"
@@ -219,14 +205,12 @@ class MultiDeepStorageModel:
             d_js = j[4] - self.D[(j[2],s)]
         else:
             d_js = j[4] - self.D[(j[2],s)] - beta(s)
-        #print(f"für job j={j} und s={s} ist das break intervall= [{a_js},{d_js}]")
         return (a_js,d_js)
     
     def is_sharing_break_interval(self,j1,j2,s):
         interval_j1 = self.break_interval(j1,s)
         interval_j2 = self.break_interval(j2,s)
         overlap = max(interval_j1[0], interval_j2[0]) < min(interval_j1[1], interval_j2[1])
-        #print(f"s={s}, j1={j1}, Intervall j1= {interval_j1}, Intervall j2= {interval_j2}, j2={j2}, overlap={overlap}")
         return overlap 
     
     def is_blocked_at_storing(self,j1,j2,s1,s2):
@@ -243,7 +227,7 @@ class MultiDeepStorageModel:
         if j[1] is not None:
             str1 = f"{j[1]} ({j[3]}) -> [{self.D[(j[1], s)]}] -> {s} [{self.break_interval(j,s)}]" #-> [{self.D[(j[2], s)]}] -> {j[2]} ({j[4]})
         else:
-            str1 = f"start at {s}" #f"start at {s} -> [{self.D[(j[2], s)]}] -> {j[2]} ({j[4]})"
+            str1 = f"start at {s}"
         if j[2] == 'p_dummy':
             str2 = f" -> end ({j[4]})"
         else:
