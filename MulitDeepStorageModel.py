@@ -3,9 +3,7 @@ from gurobipy import Model, GRB, quicksum
 
 class MultiDeepStorageModel:
     def __init__(self, J, bar_J, S, D, Rho_j, R):
-        """
-        Initialisierung des Modells und der Daten
-        """
+
         self.model = Model("Multi-Deep Storage")
         self.J = J 
         self.bar_J = bar_J 
@@ -32,10 +30,6 @@ class MultiDeepStorageModel:
         self._add_constraints()
 
     def _initialize_S_s(self):
-        """
-        Initialisiert die Nachbarschaftsrelation S_s für alle Speicherplätze s in S.
-        Die Logik entspricht der vorherigen Definition als Lambda-Funktion.
-        """
         self.S_s = {}  
         for s in self.S:
             self.S_s[s] = [
@@ -45,9 +39,6 @@ class MultiDeepStorageModel:
             ]
 
     def _initialize_S_j(self):
-        """
-        Initialisiert S_j für jedes Stopover j, basierend auf den Eingabedaten und der break_interval-Methode.
-        """
         for j in self.J:
             self.S_j[j] = [
                 s for s in self.S if self.break_interval(j, s)[0] < self.break_interval(j, s)[1]
@@ -56,9 +47,6 @@ class MultiDeepStorageModel:
                 raise ValueError(f"S_j for stopover {j} is empty. No valid storage positions were found.")
 
     def _initialize_theta(self):
-        """
-        Initialisiert Theta_s, theta_ss_prime_1 und theta_ss_prime_2 basierend auf den Eingabedaten.
-        """
         for s in self.S:
             self.Theta_s[s] = [
                 (j1, j2) for j1 in self.J for j2 in self.J if j1 != j2 and self.is_sharing_break_interval(j1, j2, s)
@@ -77,9 +65,6 @@ class MultiDeepStorageModel:
                 ]
 
     def _initialize_variables(self):
-        """
-        Initialisiere die Entscheidungsvariablen
-        """
         self.x = self.model.addVars(
             ((j, s) for j in self.J + self.bar_J for s in self.S),
             vtype=GRB.BINARY,
@@ -98,9 +83,6 @@ class MultiDeepStorageModel:
         )
 
     def _set_objective(self):
-        """
-        Definiere die Zielfunktion
-        """
         self.model.setObjective(
             quicksum(self.get_E()[j, s] * self.x[j, s] for j in self.J for s in self.S) +
             quicksum((self.b_1[s, s_prime, j] + self.b_2[s, s_prime, j]) * 4 * abs(s[2])
@@ -109,9 +91,6 @@ class MultiDeepStorageModel:
         )
 
     def _add_constraints(self):
-        """
-        Füge Nebenbedingungen hinzu
-        """
         self.model.addConstrs(
             (quicksum(self.x[j, s] for s in self.S_j[j]) == 1 for j in self.J),
             name="one_storage_per_stopover"
@@ -139,15 +118,9 @@ class MultiDeepStorageModel:
         )
     
     def optimize(self):
-        """
-        Optimierungsfunktion
-        """
         self.model.optimize()
 
     def to_string(self):
-        """
-        Extrahiere die Lösung
-        """
         if self.model.status == GRB.OPTIMAL:
             print("====================================================================")
             print("Optimale Lösung gefunden:")
